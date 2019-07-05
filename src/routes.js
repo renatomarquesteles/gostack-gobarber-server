@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import multerConfig from './config/multer';
 
+import AppointmentController from './app/controllers/AppointmentController';
 import FileController from './app/controllers/FileController';
 import ProviderController from './app/controllers/ProviderController';
 import SessionController from './app/controllers/SessionController';
@@ -22,9 +23,11 @@ routes.use(authMiddleware);
 
 // Atualização de usuário
 routes.put('/users', UserController.update);
-
-routes.post('/files', upload.single('file'), FileController.store);
-
+// Listagem de prestadores de serviço
 routes.get('/providers', ProviderController.index);
+// Cadastro de agendamento
+routes.post('/appointments', AppointmentController.store);
+// Upload de arquivo
+routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
