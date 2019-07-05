@@ -25,6 +25,8 @@ routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 // Listagem de prestadores de serviço
 routes.get('/providers', ProviderController.index);
+// Listagem de agendamentos do usuário
+routes.get('/appointments', AppointmentController.index);
 // Cadastro de agendamento
 routes.post('/appointments', AppointmentController.store);
 // Upload de arquivo
