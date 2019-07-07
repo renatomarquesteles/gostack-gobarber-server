@@ -4,6 +4,7 @@ import multerConfig from './config/multer';
 
 import AppointmentController from './app/controllers/AppointmentController';
 import FileController from './app/controllers/FileController';
+import NotificationController from './app/controllers/NotificationController';
 import ProviderController from './app/controllers/ProviderController';
 import ScheduleController from './app/controllers/ScheduleController';
 import SessionController from './app/controllers/SessionController';
@@ -34,5 +35,7 @@ routes.post('/appointments', AppointmentController.store);
 routes.post('/files', upload.single('file'), FileController.store);
 // Listagem de agenda do prestador
 routes.get('/schedule', ScheduleController.index);
+// Listagem de notificações do usuário
+routes.get('/notifications', NotificationController.index);
 
 export default routes;
