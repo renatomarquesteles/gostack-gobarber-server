@@ -31,6 +31,8 @@ routes.get('/providers', ProviderController.index);
 routes.get('/appointments', AppointmentController.index);
 // Cadastro de agendamento
 routes.post('/appointments', AppointmentController.store);
+// Cancelar agendamento
+routes.delete('/appointments/:id', AppointmentController.delete);
 // Upload de arquivo
 routes.post('/files', upload.single('file'), FileController.store);
 // Listagem de agenda do prestador
