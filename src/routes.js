@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import multerConfig from './config/multer';
 
+import AvailableController from './app/controllers/AvailableController';
 import AppointmentController from './app/controllers/AppointmentController';
 import FileController from './app/controllers/FileController';
 import NotificationController from './app/controllers/NotificationController';
@@ -27,6 +28,8 @@ routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 // Listagem de prestadores de serviço
 routes.get('/providers', ProviderController.index);
+// Listagem dos horários disponíveis de um prestador
+routes.get('/providers/:providerId/available', AvailableController.index);
 // Listagem de agendamentos do usuário
 routes.get('/appointments', AppointmentController.index);
 // Cadastro de agendamento
