@@ -21,6 +21,8 @@ routes.post('/users', UserController.store);
 // Login
 routes.post('/sessions', SessionController.store);
 
+routes.get('/', (req, res) => res.send('ok'));
+
 // Verifica se o usuário está logado, para todas as rotas abaixo
 routes.use(authMiddleware);
 
