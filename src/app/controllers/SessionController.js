@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import * as Yup from 'yup';
 
 import User from '../models/User';
 import File from '../models/File';
@@ -7,17 +6,6 @@ import authConfig from '../../config/auth';
 
 class SessionController {
   async store(req, res) {
-    const schema = Yup.object().shape({
-      email: Yup.string()
-        .email()
-        .required(),
-      password: Yup.string().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation failed' });
-    }
-
     const { email, password } = req.body;
 
     const user = await User.findOne({
@@ -49,9 +37,6 @@ class SessionController {
         provider,
         avatar,
       },
-      // Método sign: Primeiro parametro = payload (informações adicionais incorporadas no token)
-      // Segundo parâmetro = texto único (md5 online)
-      // Terceiro parâmetro = expiração do token
       token: jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),

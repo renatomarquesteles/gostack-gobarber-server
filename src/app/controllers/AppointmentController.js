@@ -1,6 +1,5 @@
 import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-import * as Yup from 'yup';
 
 import Appointment from '../models/Appointment';
 import CancellationMail from '../jobs/CancellationMail';
@@ -39,29 +38,14 @@ class AppointmentController {
   }
 
   async store(req, res) {
-    const schema = Yup.object().shape({
-      provider_id: Yup.number().required(),
-      date: Yup.date().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation failed' });
-    }
-
     const { provider_id, date } = req.body;
 
-    /**
-     * Check if user is scheduling himself
-     */
     if (req.userId === provider_id) {
       return res
         .status(401)
         .json({ error: 'A provider can not schedule himself' });
     }
 
-    /**
-     * Check if provider_id is a provider
-     */
     const checkIsProvider = await User.findOne({
       where: { id: provider_id, provider: true },
     });
@@ -72,18 +56,12 @@ class AppointmentController {
         .json({ error: 'You can only create appointments with providers' });
     }
 
-    /**
-     * Check for past dates
-     */
     const hourStart = startOfHour(parseISO(date));
 
     if (isBefore(hourStart, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
-    /**
-     * Check date availability
-     */
     const checkAvailability = await Appointment.findOne({
       where: {
         provider_id,
@@ -104,9 +82,6 @@ class AppointmentController {
       date,
     });
 
-    /**
-     * Notify appointment to provider
-     */
     const user = await User.findByPk(req.userId);
     const formattedDate = format(
       hourStart,
@@ -143,7 +118,7 @@ class AppointmentController {
         error: "User don't have permission to cancel this appointment",
       });
     }
-    // Remove duas horas do agendamento
+
     const dateWithSub = subHours(appointment.date, 2);
 
     if (isBefore(dateWithSub, new Date())) {
